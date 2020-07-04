@@ -1,8 +1,9 @@
 # docker-rails-6-boilerplate
 
 ```
-$ git clone --bare git@github.com:caio-nas/docker-rails-6-boilerplate.git <YOUR_APP_NAME>
+$ git clone --depth 1 git@github.com:caio-nas/docker-rails-6-boilerplate.git <YOUR_APP_NAME>
 $ cd <YOUR_APP_NAME>
+$ git remote remove origin
 $ docker-compose run --rm web bundle install
 $ docker-compose run --rm web bundle exec rails new . -m template.rb -d postgresql --skip-system-test --skip-action-text --skip-action-cable --skip-git -T # only for new projects
 $ docker-compose run --rm web yarn install
