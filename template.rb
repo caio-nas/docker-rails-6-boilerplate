@@ -12,9 +12,7 @@ def add_gems
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise-i18n'
   gem 'sidekiq', '~> 6.1', '>= 6.1.0'
-  gem 'therubyracer'
   gem 'haml-rails', '~> 2.0'
-  gem 'less-rails'
   gem 'twitter-bootstrap-rails'
 
   gem_group :development, :test do
@@ -50,7 +48,7 @@ def copy_templates
 end
 
 def add_bootstrap
-  run 'bundle exec rails g bootstrap:install less'
+  run 'bundle exec rails g bootstrap:install static'
 end
 
 def add_sidekiq
