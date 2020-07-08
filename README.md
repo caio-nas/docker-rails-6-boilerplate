@@ -14,3 +14,7 @@ $ docker-compose up -d
 ```
 
 You can see Rails top page on http://localhost:3000/.
+
+## TODO
+
+twitter-bootstrap-rails is creating another application.js on the rails 5 old path
