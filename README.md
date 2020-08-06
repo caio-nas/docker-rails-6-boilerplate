@@ -3,7 +3,7 @@
 Get up and running with a ton of code that you don't have time to understand and would just copy and paste anyway! \o/
 
 ```
-$ git clone --depth 1 git@github.com:caio-nas/docker-rails-6-boilerplate.git <YOUR_APP_NAME>
+$ git clone --depth 1 git@github.com:caio-nas/release-the-kraken.git <YOUR_APP_NAME>
 
 $ cd <YOUR_APP_NAME>
 $ docker-compose run --rm web bundle install
