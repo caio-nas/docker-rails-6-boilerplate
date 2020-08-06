@@ -1,4 +1,6 @@
-# docker-rails-6-boilerplate
+# Release the kraken!
+
+Get up and running with a ton of code that you don't have time to understand and would just copy and paste anyway! \o/
 
 ```
 $ git clone --depth 1 git@github.com:caio-nas/docker-rails-6-boilerplate.git <YOUR_APP_NAME>
