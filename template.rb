@@ -14,12 +14,30 @@ def add_gems
   gem 'sidekiq', '~> 6.1', '>= 6.1.0'
   gem 'haml-rails', '~> 2.0'
   gem 'twitter-bootstrap-rails'
+  gem 'kaminari'
+  gem 'awesome_print'  
 
   gem_group :development, :test do
-    gem 'rspec-rails'
     gem 'pry-rails'
     gem 'pry-byebug'
+    gem 'bundler-audit'
+    gem 'rails_best_practices'
   end
+  
+  gem_group :test do
+    gem 'rspec-rails'    
+    gem 'factory_bot'
+    gem 'faker'
+  end  
+  
+  gem_group :development do
+    gem 'guard'    
+    gem 'guard-rails_best_practices'
+    gem 'guard-rubocop'
+    gem 'guard-rspec', require: false
+    gem 'better_errors'
+    gem 'binding_of_caller'
+  end  
 end
 
 def add_users
@@ -88,6 +106,13 @@ def setup_git
   git commit: %Q{ -m 'Project Initial commit' }
 end
 
+def setup_guard
+  run 'bundle exec guard init'
+  run 'bundle exec guard init rubocop'
+  run 'bundle exec guard init rspec'
+  run 'guard init rails_best_practices'
+end
+
 # Main setup
 source_paths
 configure_locale
@@ -97,6 +122,7 @@ after_bundle do
   copy_templates
   add_bootstrap
   add_sidekiq
+  setup_guard
 
   # Migrate
   add_users
