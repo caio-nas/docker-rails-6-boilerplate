@@ -9,13 +9,14 @@ def source_paths
 end
 
 def add_gems
-  gem 'devise', '~> 4.7', '>= 4.7.1'
+  gem 'devise'
   gem 'devise-i18n'
-  gem 'sidekiq', '~> 6.1', '>= 6.1.0'
-  gem 'haml-rails', '~> 2.0'
+  gem 'sidekiq'
+  gem 'haml-rails'
   gem 'twitter-bootstrap-rails'
   gem 'kaminari'
-  gem 'awesome_print'  
+  gem 'awesome_print'
+  gem 'draper'
 
   gem_group :development, :test do
     gem 'pry-rails'
@@ -23,21 +24,21 @@ def add_gems
     gem 'bundler-audit'
     gem 'rails_best_practices'
   end
-  
+
   gem_group :test do
-    gem 'rspec-rails'    
+    gem 'rspec-rails'
     gem 'factory_bot'
     gem 'faker'
-  end  
-  
+  end
+
   gem_group :development do
-    gem 'guard'    
+    gem 'guard'
     gem 'guard-rails_best_practices'
     gem 'guard-rubocop'
     gem 'guard-rspec', require: false
     gem 'better_errors'
     gem 'binding_of_caller'
-  end  
+  end
 end
 
 def add_users
@@ -85,19 +86,22 @@ def add_sidekiq
   insert_into_file "config/routes.rb", "#{content}\n\n", after: "Rails.application.routes.draw do\n"
 end
 
-def cleanup
-  remove_file 'template.rb'
-  remove_file 'app/views/layouts/application.html.erb'
-  remove_dir 'app_template'
-  remove_dir 'config_template'
-  run 'git remote remove origin'
+def add_better_errors
+  content = <<-RUBY
+    if defined?(BetterErrors) && ENV['SSH_CLIENT']
+      host = ENV['SSH_CLIENT'].match(/\A([^\s]*)/)[1]
+      BetterErrors::Middleware.allow_ip! host if host
+    end
+  RUBY
+
+  environment content, env: 'development'
 end
 
 def configure_locale
   environment "config.i18n.default_locale = 'pt-BR'"
 end
 
-def setup_git
+def configure_git
   run "git config --global user.email 'caio.mvnascimento@gmail.com'"
   run "git config --global user.name 'Caio Nascimento'"
 
@@ -106,11 +110,23 @@ def setup_git
   git commit: %Q{ -m 'Project Initial commit' }
 end
 
-def setup_guard
+def add_draper
+  run 'bundle exec rails generate draper:install'
+end
+
+def add_guard
   run 'bundle exec guard init'
   run 'bundle exec guard init rubocop'
   run 'bundle exec guard init rspec'
-  run 'guard init rails_best_practices'
+  run 'bundle exec guard init rails_best_practices'
+end
+
+def cleanup
+  remove_file 'template.rb'
+  remove_file 'app/views/layouts/application.html.erb'
+  remove_dir 'app_template'
+  remove_dir 'config_template'
+  run 'git remote remove origin'
 end
 
 # Main setup
@@ -119,17 +135,19 @@ configure_locale
 add_gems
 
 after_bundle do
+  add_draper
   copy_templates
   add_bootstrap
   add_sidekiq
-  setup_guard
+  add_guard
+  add_better_errors
 
   # Migrate
   add_users
   rails_command 'db:migrate:reset'
 
   cleanup
-  setup_git
+  configure_git
 
   say
   say 'Kickoff app successfully created! 👍', :green
