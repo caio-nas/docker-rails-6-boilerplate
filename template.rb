@@ -17,6 +17,7 @@ def add_gems
   gem 'kaminari'
   gem 'awesome_print'
   gem 'draper'
+  gem 'rack-attack'
 
   gem_group :development, :test do
     gem 'pry-rails'
@@ -32,9 +33,9 @@ def add_gems
   end
 
   gem_group :development do
-    gem 'guard'
-    gem 'guard-rails_best_practices'
-    gem 'guard-rubocop'
+    gem 'guard', require: false
+    gem 'guard-rails_best_practices', require: false
+    gem 'guard-rubocop', require: false
     gem 'guard-rspec', require: false
     gem 'better_errors'
     gem 'binding_of_caller'
@@ -89,12 +90,16 @@ end
 def add_better_errors
   content = <<-RUBY
     if defined?(BetterErrors) && ENV['SSH_CLIENT']
-      host = ENV['SSH_CLIENT'].match(/\A([^\s]*)/)[1]
+      host = ENV['SSH_CLIENT'].match(/\\A([^\\s]*)/)[1]
       BetterErrors::Middleware.allow_ip! host if host
     end
   RUBY
 
   environment content, env: 'development'
+end
+
+def add_rspec
+  run 'bundle exec rails generate rspec:install'
 end
 
 def configure_locale
@@ -139,7 +144,7 @@ after_bundle do
   copy_templates
   add_bootstrap
   add_sidekiq
-  add_guard
+  add_rspec
   add_better_errors
 
   # Migrate

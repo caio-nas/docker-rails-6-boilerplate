@@ -78,6 +78,6 @@ class Rack::Attack
 
   ### Safelisting IPs ###
 
-  host = ENV['SSH_CLIENT'].match(/\A([^\s]*)/)[1]
-  safelist_ip host
+  host = ENV['SSH_CLIENT'].match(/\A([^\s]*)/)[1] if ENV['SSH_CLIENT']
+  safelist_ip(host)
 end
