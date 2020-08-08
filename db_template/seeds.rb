@@ -12,5 +12,4 @@ newuser = User.new(
   password_confirmation: '123@qwe',
   admin: true
 )
-newuser.skip_confirmation!
 newuser.save!
