@@ -152,6 +152,7 @@ after_bundle do
   # Migrate
   add_users
   rails_command 'db:migrate:reset'
+  rails_command 'db:seed'
 
   cleanup
   configure_git
