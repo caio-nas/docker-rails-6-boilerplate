@@ -65,6 +65,7 @@ end
 def copy_templates
   directory 'app_template', 'app', force: true
   directory 'config_template', 'config', force: true
+  directory 'db_template', 'db', force: true
 end
 
 def add_bootstrap
@@ -131,6 +132,7 @@ def cleanup
   remove_file 'app/views/layouts/application.html.erb'
   remove_dir 'app_template'
   remove_dir 'config_template'
+  remove_dir 'db_template'
   run 'git remote remove origin'
 end
 
