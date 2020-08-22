@@ -14,3 +14,17 @@ stop:
 
 down:
 	docker-compose down
+
+new:
+	docker-compose run --rm web bundle install
+	docker-compose run --rm web bundle exec rails new . -m template.rb -d postgresql --skip-system-test --skip-action-text --skip-action-cable --skip-git -f -T
+	docker-compose up -d
+
+test:
+	docker-compose exec web bundle exec rspec
+
+setup:
+	docker-compose run --rm web bundle install
+	docker-compose up -d
+	docker-compose exec web yarn install --check-files
+	docker-compose exec web bundle exec rails db:setup

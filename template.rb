@@ -10,10 +10,10 @@ end
 
 def add_gems
   gem 'devise'
+  gem 'rails-i18n'
   gem 'devise-i18n'
   gem 'sidekiq'
   gem 'haml-rails'
-  gem 'twitter-bootstrap-rails'
   gem 'kaminari'
   gem 'awesome_print'
   gem 'draper'
@@ -22,14 +22,23 @@ def add_gems
   gem_group :development, :test do
     gem 'pry-rails'
     gem 'pry-byebug'
-    gem 'bundler-audit'
     gem 'rails_best_practices'
+  end
+
+  gem_group :development, :production do
+    gem 'twitter-bootstrap-rails'
   end
 
   gem_group :test do
     gem 'rspec-rails'
     gem 'factory_bot'
+    gem 'factory_bot_rails'
     gem 'faker'
+    gem 'rails-controller-testing'
+    gem 'database_cleaner'
+    gem 'shoulda-matchers'
+    gem 'simplecov', require: false
+    gem 'rspec-collection_matchers'
   end
 
   gem_group :development do
@@ -66,6 +75,7 @@ def copy_templates
   directory 'app_template', 'app', force: true
   directory 'config_template', 'config', force: true
   directory 'db_template', 'db', force: true
+  directory 'spec_template', 'spec', force: true
 end
 
 def add_bootstrap
@@ -133,6 +143,7 @@ def cleanup
   remove_dir 'app_template'
   remove_dir 'config_template'
   remove_dir 'db_template'
+  remove_dir 'spec_template'
   run 'git remote remove origin'
 end
 
@@ -143,10 +154,10 @@ add_gems
 
 after_bundle do
   add_draper
-  copy_templates
   add_bootstrap
-  add_sidekiq
   add_rspec
+  copy_templates
+  add_sidekiq
   add_better_errors
 
   # Migrate
